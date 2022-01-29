@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? 앱에 state를 2개 이상 써봄 
+      ? -->
+  <!-- ? (예제 이어서... min &lt;-&gt; hours 를 flip(enabled&lt;-&gt;disabled)하는 것 구현)  -->
+  <!-- ! state를 바탕으로 UI를 변경할 수 있다는 것이 얼마나 유용한지 알아보자. -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    function App() {
+      //// const [minutes, setMinutes] = React.useState(0);
+      // 위의 "minutes" state 대신, "amount"로 이름 변경
+      const [amount, setAmount] = React.useState(0);
+      // 새로운 State를 조작해줘야 함 (onFlip 함수에서 사용할)
+      const [inverted, setInverted] = React.useState(false);
+
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      // flip해주는 함수 (negation 사용해서)
+      //// const onFLip = () => setInverted(!inverted);
+      // (하지만 위의 방식(state를 바로 가져다쓰는)은 좋지 못하다고 배웠음. 3-4-*.html 참고)
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current); // 현재의 state값을 기반으로 data조작
+      };
+      // JSX 덕분에, disabled 부분에 JS코드를 이렇게 집어넣을 수 있음 (ex. === 비교연산자, 삼항연산자(ternary operator))
+      return (
+        <div>
+          <h1 className="hi">Super Converter</h1>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={inverted ? amount * 60 : amount}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={inverted === true}
+            ></input>
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              value={inverted ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              onChange={onChange}
+              type="number"
+              disabled={inverted === false}
+            ></input>
+          </div>
+          현재 inverted 상태를 사용자에게 표현
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>{inverted ? 'To Minutes' : 'To Hours'}</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

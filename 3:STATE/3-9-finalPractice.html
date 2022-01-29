@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? 컴포넌트들을 separate: 컴포넌트들을 기능별로 분리할 수 있게 해주고, 컴포넌트를 각각 재사용할 수 있게 해줌! -->
+  <!-- ! 메뉴를 추가해보자 (different versions) -->
+  <script type="text/babel">
+    // 기존 "App" 복붙, 이름을 다음과 같이 바꾸고, title부분제거
+    function MinutesToHours() {
+      const [amount, setAmount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reset = () => setAmount(0);
+      const onInvert = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={inverted ? amount * 60 : amount}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              onChange={onChange}
+              disabled={inverted === true}
+            ></input>
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              value={inverted ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              onChange={onChange}
+              type="number"
+              disabled={inverted === false}
+            ></input>
+          </div>
+          현재 inverted 상태를 사용자에게 표현
+          <button onClick={reset}>Reset</button>
+          <button onClick={onInvert}>{inverted ? 'To Minutes' : 'To Hours'}</button>
+        </div>
+      );
+    }
+    function KmToMiles() {
+      return <h3>Km to Miles</h3>;
+    }
+
+    // App이 분-시 변환에 신경을 껐으면 좋겠음 -> 아래의 부분
+    /* A Component can render another Component inside! (recap 2-6-*.html) */
+    function App() {
+      // (이 부분 코드 제거)
+
+      // 어떤 변환기를 보여줄지에 대한 state (default는 "xx"으로 설정)
+      const [index, setIndex] = React.useState('xx');
+      // <select> 태그에 event-listener를 달아서, event를 확인해보자
+      const onSelect = (event) => {
+        console.log(event.target.value);
+        setIndex(event.target.value);
+      };
+
+      // UI가 새로고침되는 것을 확인해보자(the whole component is re-rendered) - 갱신된 state값과 함께 찍어봄
+      console.log('render with ', index);
+      return (
+        <div>
+          <h1 className="hi">Super Converter</h1>
+          (이 부분 코드도 제거하고, 이렇게 컴포넌트(App)에 다른 컴포넌트를 render할 수 있다는 것을 활용해서 대체해보자) 이 방식대로, 다른 변환기를
+          추가해보자. <br /> But 스위치로 선택해서 보여줌: 'select' html태그 사용
+          <br />
+          <select value={index} onChange={onSelect}>
+            <option value="xx">Select your units..</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <br />
+          <br />
+          JS코드로, 이렇게 컴포넌트(App)에 다른 컴포넌트를 render할 수 있다는 것을 활용해서 대체해보자
+          <hr />
+          {index === 'xx' ? 'Please select your units!' : null}
+          {index === '0' ? <MinutesToHours /> : null}
+          {index === '1' ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+
+    const root = document.getElementById('root');
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

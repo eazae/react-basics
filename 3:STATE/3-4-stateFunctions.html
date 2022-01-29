@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? State 를 변경하는 방식에는 2가지가 있음 -->
+  <!-- ! 2가지 방식 소개 -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    function App() {
+      const [counter, setCounter] = React.useState(0);
+      const onClick = () => {
+        // 방식1. 직접 할당: setCounter()를 이용해서 원하는 값을 직접 넣어줌
+        // 별로 좋은 방식이 아님.
+        // 이유)counter는 다른 곳에서 update될 수 있음 (의도와는 다른 데이터가 들어갈 수 있음)
+        setCounter(1234); // (원하는 값 ex.1234 를 직접 넣음)
+
+        setCounter(counter + 1);
+        // (위의 방식1(line22.)도 방식2. 와 맥락이 비슷하지만, better way는 다음과 같음)
+
+        // 방식2. **함수**를 할당: 이이전 state값을 기반으로 다음 state값을 계산함
+        // setCounter()의 param으로 함수(function)을 넘길 수 있음!
+        //! 이때 이 함수는 - param) 현재 값 / return) 새로운 state
+        setCounter((current) => current + 1);
+        // 장점) 방식1. 보다 안전
+        // 이유) 방식2.식으로 함수를 사용했을 때, React.js가 이 current값이 확실히 현재 값이라는 것을 garantee해줌
+
+        /* (여기서 잠깐! line28에서 setCounter의 인자값이 "current"(!="counter")여도 정상적으로 작동하는 것일까?)
+        A. react-dom.development.js line15228 - setState의 인자값이 객체인지 함수인지 판별하는 부분이 있다. 
+        함수일 경우, 저장되어 있는 값(객체)를 인자로 하여 return한 값을 최종적으로 업데이트한다. (즉 현재 state값을 찾아 자동으로 매핑(?))
+        */
+      };
+
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3>
+          <button onClick={onClick}>Click me</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

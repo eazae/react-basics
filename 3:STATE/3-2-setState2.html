@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? State -->
+  <!-- ! ii-2) modifier -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    function App() {
+      // "counter"의 값을 바꿔야 되므로 const -> let으로 바꿔주자
+      //// let [counter, modifier] = React.useState(0);
+
+      // modifier
+      // 이렇게 data를 modify하는 함수를 선언하고, event-listener로 등록한다고 해도, re-render는 이루어지지 않음
+      // (3-0(별로인 방식) 과 동일한 상황으로 돌아온것!)
+      const onClick1 = () => {
+        //// counter = counter + 1;
+        //// console.log(counter);
+        // => 따라서, 이렇게 "modifier" 함수를 사용하자
+        //! 1. 데이터 값을 바꿀 수 있음!
+        //! 2. re-rendering이 자동으로 이루어짐! (즉, 우리가 직접 ReactDOM.render()를 호출할 필요가 없음!) -> i.e. 업데이트 해줌
+        modifier(12341234);
+      };
+      // -------------------------------
+
+      /* 정리 */
+      // convention) 일반적으로 modifier함수의 이름은 "set"+=(데이터 이름)으로 선언 - camel case로
+
+      // counter를 modifier에서 바꾸는 방식으로 다시 함 -> const로 다시 바꿔주자
+      const [counter, setCounter] = React.useState(0);
+      const onClick2 = () => {
+        setCounter(counter + 1); // counter에 +1가 된 값으로 변경됨 (counter++ 같이?)
+      };
+
+      // (re-render되는 것을 확인)
+      console.log('rendered..');
+      console.log(counter);
+
+      // (JSX - 위의 onClick함수를 event-listener로 달아줌)
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3>
+          <button onClick={onClick2}>Click me</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+  <!-- ? to be continued... : modifier가 필요한 이유와 그 사용법 -->
+</html>

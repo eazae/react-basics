@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- Vanilla JS만으로 interactive web 구현 (Type1) -->
+<html>
+  <!--* Step1.Create the HTML -->
+  <body>
+    <span>Total clicks: 0</span>
+    <button id="btn">Click me</button>
+  </body>
+  <script>
+    let counter = 0;
+    //** Step2. Grab it from JS
+    const button = document.getElementById('btn'); // id 속성값
+    const span = document.querySelector('span'); // 태그명
+    function handleClick() {
+      //** Step4. Update the data
+      counter++;
+      console.log('I have been Clicked');
+      //** change the HTML text with the changed value
+      // (remember how to use backticks + ${})
+      span.innerText = `Total clicks: ${counter}`;
+    }
+    //** Step3. Listen for events
+    button.addEventListener('click', handleClick);
+  </script>
+</html>

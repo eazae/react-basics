@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <!--* Step1. load React -->
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- ! Babel import -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- ! type="text/babel" -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+
+    //! JSX로 다음과 같이 element를 생성할 수 있음
+    //// const span = React.createElement('span', { id: 'sample-span', style: { color: 'blue' } }, 'Hello span content..');
+    const Title = (
+      <span id="sample-span" onMouseEnter={() => console.log('mouse enter..')}>
+        Hello span content..
+      </span>
+    );
+
+    // const btn = React.createElement(
+    //   'button',
+    //   {
+    //     onClick: () => console.log('clicked:: THIS IS THE POWER OF REACT_JS!!'),
+    //     onMouseEnter: () => console.log('mouse enter..'),
+    //     // React is smart enough to distinguish what is a property or is a event-listener("on~"으로 시작하는 것들)
+    //     style: { backgroundColor: 'tomato' },
+    //   },
+    //   'Click me'
+    // );
+    const Button = (
+      //! style은 '{}' 2개 필요
+      <button
+        style={{ backgroundColor: 'tomato' }}
+        onClick={() => console.log('clicked:: THIS IS THE POWER OF REACT_JS!!')}
+        onMouseEnter={() => console.log('mouse enter..')}
+      >
+        Click me
+      </button>
+    );
+
+    // #2.6 이 부분도 JSX 방식으로 바꿔주자. (2.6jsx2.html)
+    const container = React.createElement('div', null, [Title, Button]);
+
+    ReactDOM.render(container, root);
+  </script>
+</html>

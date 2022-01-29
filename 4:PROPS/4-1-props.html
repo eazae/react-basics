@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? props: 부모 컴포넌트에서 자식 컴포넌트로 데이터를 보내는 방법 -->
+  <!-- ! 부모 컴포넌트에서 자식 컴포넌트로 데이터를 보내는 예시
+  !: ReactJS는 자동으로 우리가 컴포넌트에 넣는 모든 property(prop)들을 하나의 Object에 담아서, 
+  !  컴포넌트의 첫번째 인자로 넘김 (함수형 컴포넌트의 파라미터는 단 하나) -->
+  <!-- * 어떻게 react Component들을 reusable(재사용성 있게)하게 만들 수 있을까?  -->
+  <!-- i) 각 버튼마다 다 따로 컴포넌트를 만들어봄 (재사용 X) -->
+  <!-- ii) 공통된 컴포넌트를 둔 다음 props로 데이터 전달 -->
+  <script type="text/babel">
+    //! i) 방식
+    // 여기서 잠깐! 컴포넌트는 그냥 함수임. 어떤 JSX를 반환하는.
+    /* 함수형 컴포넌트: 이때 함수를 호출하는 방식은 <component명 />여기에서 함수가 호출된다 */
+    function SaveBtn() {
+      /* ReactJS에서 style을 변경할 수 있는 방법에는 많은 것들이 있다.
+        ex. css, JSX태그 안에서 styles property (json obj형태로 넣으면됨. 이중 {{}}), etc.
+        (아래는 그 중 style 사용)*/
+      return (
+        <button
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          Save Changes
+        </button>
+      );
+    }
+    function ConfirmBtn() {
+      return (
+        // 만약 모든 버튼마다 이렇게 style을 일일이 설정해줘야 된다면..? :(
+        // 위의 SaveBtn과 다른 것이 text내용밖에 없다..
+        <button
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          Confirm
+        </button>
+      );
+    }
+
+    //! ii) 방식: <Btn />
+    // 사용자 정의 컴포넌트는, 이 "()"로 argument(인자)를 받음. 리액트가 넣어주는 것임
+    // (props 정보는, 함수형 컴포넌트에서 ()안에 첫번째 parameter처럼 전달됨. 즉, <Btn banana="Save Changes" />는 Btn({banana:"Save Changes"}); 와 같은 느낌임)
+    function Btn(props) {
+      console.log(props);
+      /* */
+      return (
+        <button
+          style={{
+            backgroundColor: 'tomato',
+            color: 'white',
+            padding: '10px 20px',
+            border: 0,
+            borderRadius: 10,
+          }}
+        >
+          {props.banana}
+        </button>
+      );
+    }
+
+    /* shortcut: 위의 방식보다 더 간단하게 props 정보를 가져오는 법이 있음 - property를 Object로부터 꺼냄 */
+    // props.banana 대신에 이렇게 중괄호({})로 바로 가져오면 됨
+    function Btn_({ banana, big }) {
+      // (이렇게 props를 기반으로 style에 if else 사용해서 할 수도 있겠다)
+      return <button style={{ fontSize: big ? 18 : 12 }}>{banana}</button>;
+    }
+
+    function App() {
+      return (
+        <div>
+          i) (문제가 많다..)
+          <SaveBtn />
+          <ConfirmBtn />
+          <hr />
+          ii) 일반 태그에서 속성을 전달하는 syntax와 비슷하게, props 정보를 전달 (props의 이름은 우리 마음대로 지어도 됨. 우리의 컴포넌트이므로!)
+          <br />
+          이 정보는, 함수형 컴포넌트에서 ()안에 첫번째 parameter처럼 전달됨.
+          <br />
+          <Btn banana="Save Changes" second="1" />
+          <Btn banana="Confirm" big={false} />
+        </div>
+      );
+    }
+
+    const root = document.getElementById('root');
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
+
+<!-- ReactJS에서 style을 변경할 수 있는 방법에는 많은 것들이 있다.
+ex. css, JSX태그 안에서 styles property (json obj형태로 넣으면됨. 이중 {{}}), etc. -->

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? props: props로 function도 보낼 수 있음 
+        ? Props Memo: props가 변경되지 않은 컴포넌트는 re-render를 방지 -->
+  <!-- ! 부모 컴포넌트에서 state(상태)를 변경할 때 어떤 일이 일어나는지 보자.-->
+  <script type="text/babel">
+    //// function Btn({ text, onClick }) {
+    function Btn({ text, changeValue }) {
+      // render가 일어나는 시점을 찍어보자
+      // (초기 render이외에) 버튼을 클릭했을 때, 콜백함수가 호출이 되고, 우리의 함수는 (modifier함수를 통해서) 부모컴포넌트("App")의 state(상태)를 변경시킴
+      // 즉, state 변경을 겪었다 -> React가 re-render를 해준다 (return(...)부분 refreshed)
+      console.log(text, ' was rendered...');
+      // BUT, 변화가 없었던 "Confirm"버튼까지 re-render가 될 필요는 없다... -> ReactJS는 애플리케이션을 최적화시키는 많은 것들을 지원하고 있음. 그중에서..
+      /* React Memo */
+      // * memorize(기억)하는 컨셉
+      // * React에게 특정 컴포넌트가 (props에 변경이 없었다면) re-render되는 것을 막아달라고 선언할 수 있음
+      // * "prop이 변했다?": state가 변했다 => 이 state는 props에 연결이 되어있기 때문에 prop이 변한 것.
+
+      //* [자동으로 eventlistener 등록 못해주는 이유]: 이렇게 컴포넌트 안에 여러개의 태그가 있거나 감싸고 있으면, 그 이벤트리스너를 어떤 element에 달아줄 것인가? 못함.
+      return (
+        <div>
+          <button
+            //! 이건 실제 EventListener (실제 HTML element에 있는 경우)
+            //// onClick={onClick}
+            onClick={changeValue}
+            style={{
+              backgroundColor: 'tomato',
+              color: 'white',
+              padding: '10px 20px',
+              border: 0,
+              borderRadius: 10,
+            }}
+          >
+            {text}
+          </button>
+        </div>
+      );
+    }
+
+    /* React Memo */ //: ReactJS에 있는 기능 소개, 필수로 알아야 하는 기능은 아니다
+    const MemorizedBtn = React.memo(Btn); // "MemorizedBtn"은 "Btn"컴포넌트의 memorized version이 될 것임
+
+    function App() {
+      // 컴포넌트의 state
+      const [value, setValue] = React.useState('Save Changes');
+      // onClick의 콜백함수:
+      // - 부모 컴포넌트("App")의 state를 변경시키는 함수
+      // - but 호출은 자식 컴포넌트("Btn")이 함 (WOW!)
+      const changeValue = () => setValue('Revert Changes');
+      return (
+        <div>
+          // onClick을 달건데, App 컴포넌트에 있는 state를 바꿀 것임 <br /> 이때 중요한 점: 'onClick'은 컴포넌트("Btn")에 전달하는(들어가는) prop이다.
+          - 즉, 실제 EventLister가 아님!! (line 17에서가 실제 EventListener) <br /> (실질적으로 React가 이벤트리스너를 추가시키는 것이 절대 아님!
+          사용자 정의 컴포넌트에서는 ** prop **에 불과) <br />
+          <Btn text={value} onClick={changeValue} />
+          <hr />
+          // [추가예시] // 'style'은 Btn의 prop이지, 'button' 태그의 style 속성이 아니기 때문에, 스타일이 적용되지 않는 것을 볼 수 있음
+          <Btn style={{ color: 'green' }} text="Style not changing" big={false} />
+          <br />
+          의미를 좀 더 확실하게 하기 위해서, 다음과 같이 "changeValue"로 prop의 이름을 변경
+          <Btn text={value} changeValue={changeValue} />
+          <Btn text="Confirm" big={false} />
+          <hr />
+          <div>
+            <h1>React Memo기능: Memorized 버튼</h1>
+            <br />
+            // 이 컴포넌트는 props에 변경이 있었기 때문에 re-render되는 것을 확인해 볼 수 있다
+            <MemorizedBtn text={value} changeValue={changeValue} />
+            // 이 컴포넌트는 re-render가 되지 않는 것을 console에서 확인해볼 수 있다
+            <MemorizedBtn text="Not re-rendering" big={false} />
+          </div>
+        </div>
+      );
+    }
+
+    const root = document.getElementById('root');
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

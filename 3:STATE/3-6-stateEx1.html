@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? 사용자 input을 받아 state를 변경하는 법을 연습하기 위해, unit converter(단위 변환기) 예제 (3-5-에 이어서)-->
+  <!-- ! (예제 이어서...)  -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    function App() {
+      // 초기값을 0으로 설정.
+      const [minutes, setMinutes] = React.useState(0);
+      const onChange = (event) => {
+        setMinutes(event.target.value);
+      };
+      // 초기화 버튼의 콜백함수
+      const reset = () => setMinutes(0);
+      // minutes와 동일한 state로 연결해주고, 시간으로 변경해주는 식을 입력
+      // 이때, hours는 minutes와 달리 onChange 이벤트와 연결을 해두지 않았기 때문에 값을 변경할 수 없는 것을 볼 수 있다.
+      return (
+        <div>
+          <h1 className="hi">Super Converter</h1>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange}></input>
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input value={Math.round(minutes / 60)} id="hours" placeholder="Hours" type="number" disabled></input>
+            ("disabled"속성을 주면 block됨, 다음 강의에서는 이 min &lt;-&gt; hours 를 flip(enabled&lt;-&gt;disabled)하는 것 구현)
+          </div>
+          초기화 버튼도 만들어주자
+          <button onClick={reset}>Reset</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

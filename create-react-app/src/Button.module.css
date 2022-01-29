@@ -1,0 +1,13 @@
+/** CSS modules */
+/* ! 파일명은 "*.module.css"로 지정 */
+/* create-react-app은 style도 modular(모듈러)가 될 수 있게 해줌
+-> 동일한 class 이름(ex. "btn")을 각각 다른 파일 내에서도 사용할 수 있음! */
+.btn {
+  color: white;
+  background-color: cadetblue;
+}
+
+/* 이렇게 다른 (module) css파일에 있는 클래스 이름과 동일해도, 리액트는 랜덤한 다른 클래스명을 부여해주기 때문에 ok */
+.title {
+  color: rebeccapurple;
+}

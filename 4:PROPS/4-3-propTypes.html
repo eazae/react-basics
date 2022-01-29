@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? Prop Types -->
+  <!-- development version -->
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+  <!-- production version -->
+  <!-- <script src="https://unpkg.com/prop-types@15.7.2/prop-types.min.js"></script> -->
+
+  <!-- ! props가 많을 때의 문제점 -->
+  <!-- 사용자가 prop으로 fontSize를 전달할 수 있도록 해보자 -->
+  <script type="text/babel">
+    function Btn({ text = 'default value', fontSize }) {
+      return (
+        <div>
+          <button
+            style={{
+              backgroundColor: 'tomato',
+              color: 'white',
+              padding: '10px 20px',
+              border: 0,
+              borderRadius: 10,
+              // fontSize: fontSize, (tip: 이렇게 이름이 같은 경우에는 아랫줄처럼 간단하게 대체 가능)
+              fontSize,
+            }}
+          >
+            {text}
+          </button>
+        </div>
+      );
+    }
+
+    /* PropTypes 사용법 */
+    // type체크를 하고 싶은 컴포넌트의 이름 += '.propTypes'
+    Btn.propTypes = {
+      // 여기에 props의 타입이 뭐고, 어떤 모양이어야 하는지 정의
+      /* (prop명): (type) */
+      text: PropTypes.string, // 타입은 string
+      fontSize: PropTypes.number.isRequired, // 타입은 number, 필수적으로 넘겨줘야 하는 prop임을 명시
+    };
+
+    function App() {
+      return (
+        <div>
+          사용자가 prop으로 fontSize를 전달할 수 있도록 해보자
+          <Btn text="Save Changes" fontSize={38} />
+          <br />
+          컴포넌트에 props가 많아지면 생길 수 있는 문제점: prop에 잘못된 값을 넘겨버리는 실수 등<br />
+          <Btn text={14} fontSize={'Continue'} />
+          <hr />
+          <h1>PropTypes 패키지</h1>
+          이러한 에러를 React가 미리 알려줄 수 있다면 어떨까 ("text"에는 string타입이, "fontSize"에는 number타입이 들어가게)
+          <br />
+          PropType은 우리가 어떤 type의 prop을 받고 있는지를 체크해줌 (위에 Btn.propTypes = {}에 정의된 정보와 다를 시 warning을 띄워줌)
+          <Btn text="이렇게 isRequired로 정의한 fontSize가 비어있을 경우도 체크" />
+          이때, JS의 syntax를 사용해서 컴포넌트의 prop에 default값을 지정할 수도 있다. <h6>line 19: function Btn(이부분코드를보자) </h6>
+          <Btn fontSize={14} />
+        </div>
+      );
+    }
+
+    const root = document.getElementById('root');
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

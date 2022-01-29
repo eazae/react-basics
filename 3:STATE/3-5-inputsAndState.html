@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script> -->
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ? 사용자 input을 받아 state를 변경하는 법을 연습하기 위해, unit converter(단위 변환기) 예제 -->
+  <!-- ! How to handle 'form's in ReactJS -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+    function App() {
+      //! Step1. create State
+      const [minutes, setMinutes] = React.useState();
+      //! Step3. function for when input value changes (event callback함수)
+      // 장점) React.js는 vanilla JS와 거의 유사하기 때문에, 아래와 같이 event로 <input>의 value를 확인해볼 수 있음!
+      const onChange = (event) => {
+        // console.log('somebody wrote something..');
+        //* event(synthetic event) > target > value 아래에 바뀐 <input>의 value(값)을 볼 수 있음!
+        console.log(event.target.value);
+        // 이제 이것을 state의 값으로 바꿔주자 (modifier함수를 사용해서 바꿔줘야 된다는 것 잊지 말기)
+        setMinutes(event.target.value); // (아래 <h4> 태그부분에서 확인해보고 있음)
+      };
+      return (
+        // 하지만 "for", "class" 등은 JS의 예약어이기 때문에, 'production.min.js'이 아닌 'development.js'로 바꾼다면 에러가 뜨는 것을 확인해볼 수 있다.
+        // "for"-> "htmlFor", "class"-> "className"으로 사용해야 함
+
+        //! Step2. <input>안에 value로 state의 data를 설정 (-> input의 value는 state의 value와 같아지게 됨)
+        //! Step4. onChange("change"이벤트) 이벤트를 listening하고 있다가, 이벤트가 발생하면 "onChange" 함수를 실행함
+        <div>
+          <h1 className="hi">Super Converter</h1>
+          <div>min &lt;-&gt; hours input창에 interactive하게 바뀌는 예제 구현 </div>
+          <label htmlFor="minutes">Minutes</label>
+          <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange}></input>
+          <h4>바뀐 state를 확인해보자: {minutes}</h4>
+          <label htmlFor="hours">Hours</label>
+          <input id="hours" placeholder="Hours" type="number"></input>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+  <!-- ? Continued in 3-6-*.html ... -->
+</html>

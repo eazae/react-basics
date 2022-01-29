@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <!--* Step1. load React -->
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- ?(여러 컴포넌트들이 합쳐진 구성) -->
+  <!--! 주의: 컴포넌트의 첫 글자는 반드시 *대문자*여야 함! -->
+  <script type="text/babel">
+    const root = document.getElementById('root');
+
+    // const Title = (
+    //   <span id="sample-span" onMouseEnter={() => console.log('mouse enter..')}>
+    //     Hello span content..
+    //   </span>
+    // );
+    //! Step1. 위의 element를 함수로 바꿈
+    function Title() {
+      //! Step2. return the JSX code
+      return (
+        <span id="sample-span" onMouseEnter={() => console.log('mouse enter..')}>
+          Hello span content..
+        </span>
+      );
+    }
+
+    // const Button = (
+    //   <button
+    //     style={{ backgroundColor: 'tomato' }}
+    //     onClick={() => console.log('clicked:: THIS IS THE POWER OF REACT_JS!!')}
+    //     onMouseEnter={() => console.log('mouse enter..')}
+    //   >
+    //     Click me
+    //   </button>
+    // );
+
+    // ("Title"과 동일, 하지만 arrow-function 사용해봄)
+    const Button = () => (
+      <button
+        style={{ backgroundColor: 'tomato' }}
+        onClick={() => console.log('clicked:: THIS IS THE POWER OF REACT_JS!!')}
+        onMouseEnter={() => console.log('mouse enter..')}
+      >
+        Click me
+      </button>
+    );
+
+    // #2.6 이 부분도 JSX 방식으로 바꿔주자. (여러 컴포넌트들이 합쳐진 구성)
+    //// const container = React.createElement('div', null, [Title, Button]);
+    // const Container = <div>Title Button</div>;
+    //** in order to put the elements in the "Container" element, */
+    //! Step1. -> change the elements into **functions**!!
+    //! Step2. -> then use it like normal HTML tags!!
+    const Container = () => (
+      <div>
+        <Title />
+        <Button />
+        이렇게 재사용도 가능
+        <Button />
+      </div>
+    );
+
+    // ReactDOM.render(Container, root);
+    // 이 부분도 변경
+    ReactDOM.render(<Container />, root);
+  </script>
+</html>
