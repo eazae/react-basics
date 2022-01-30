@@ -1,7 +1,7 @@
 import React from 'react';
 // 1. ReactDOM을 import하고,
 import ReactDOM from 'react-dom';
-import App from './App6';
+import App from './App';
 // CSS option 1.
 //// import './styles.css';
 
