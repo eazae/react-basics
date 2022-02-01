@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/(github_repository_name)/static/js/main.7d7b0c4f.js",
+    "index.html": "/(github_repository_name)/index.html",
+    "main.7d7b0c4f.js.map": "/(github_repository_name)/static/js/main.7d7b0c4f.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.7d7b0c4f.js"
+  ]
+}
