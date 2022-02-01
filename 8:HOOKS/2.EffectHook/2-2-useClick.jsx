@@ -7,6 +7,7 @@ const { useState, useEffect, useRef } = require('react');
 const App = () => {
   //! reference란? the way that we can select a part of out component
   // == document.getElementById() 와 동등
+  /* useRef() */
   const potato = useRef();
   setTimeout(() => console.log(potato.current), 5000);
   return (
